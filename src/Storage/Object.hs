@@ -9,7 +9,8 @@ data Object = Object
     }
 
 data StoreResponse = Success T.Text | Failure T.Text
+    deriving (Eq, Show)
 
 data Handle = Handle
-    { store      :: Object -> IO (StoreResponse)
+    { store :: Object -> IO (StoreResponse)
     }

@@ -19,9 +19,9 @@ import System.Posix.Files
 import qualified Storage.Object as Obj
 
 data Config = Config
-    { awsConfig :: !Aws.Configuration
-    , awsDomain :: !T.Text -- Need a good URL lib
-    , manager   :: !Manager
+    { awsConfig :: Aws.Configuration
+    , awsDomain :: S.ByteString -- Need a good URL lib
+    , manager   :: Manager
     }
 
 -- | Aws implementation of Storage.Object.
@@ -33,7 +33,7 @@ withHandle cfg = Obj.Handle
 store :: Config -> Obj.Object -> IO Obj.StoreResponse
 store cfg obj = do
     let awscfg = awsConfig cfg
-    let s3cfg = S3.s3 Aws.HTTP (T.encodeUtf8 $ awsDomain cfg) False
+    let s3cfg = S3.s3 Aws.HTTP (awsDomain cfg) False
     let mgr = manager cfg
     runResourceT $ do
         let file = Obj.objData obj
